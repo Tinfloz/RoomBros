@@ -37,23 +37,22 @@ const Creds: React.FC<ICredsProps> = ({ register, owner }) => {
     });
 
     let mutation: any;
-    mutation = register ? api.auth.register.useMutation() : api.auth.login.useMutation();
+    mutation = register ? api.auth.register.useMutation() : api.auth.login.useMutation()
 
     const handleSubmit = async () => {
         mutation.mutate(creds);
     }
 
+
     useEffect(() => {
         if (firsRenderRef.current) {
-            console.log("ref run")
             firsRenderRef.current = false;
             return
         };
         if (mutation.isError) {
-            console.log("running")
             errorToast();
         } else if (mutation.isSuccess) {
-            console.log("running")
+            localStorage.setItem("user", JSON.stringify(mutation.data))
             successToast();
         };
     }, [JSON.stringify(mutation)])

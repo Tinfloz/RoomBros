@@ -1,10 +1,8 @@
 // import { prisma } from "../../db";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import { z } from "zod";
-import * as jose from "jose";
 import bcrypt from "bcryptjs";
 import { getAccessToken } from "../../../../helpers/get.access.token";
-import { User } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 
 const authZod = z.object({
@@ -71,11 +69,11 @@ export const authRouter = createTRPCRouter({
                 message: "password incorrect"
             })
         };
-        const loginUser = userType === "owner" ? ctx.prisma.owner.create({
+        const loginUser = userType === "owner" ? await ctx.prisma.owner.create({
             data: {
                 userId: user.id
             }
-        }) : ctx.prisma.customer.create({
+        }) : await ctx.prisma.customer.create({
             data: {
                 userId: user.id
             }
